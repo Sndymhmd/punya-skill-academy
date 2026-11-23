@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@netlify/plugin-nextjs": "^5.16.9",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.119.2",
     "@tailwindcss/postcss": "^4.3.5",

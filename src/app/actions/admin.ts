@@ -43,21 +43,13 @@ export async function updateApplicationStatus(id: string, status: 'approved' | '
 export async function createNewCertificate(formData: FormData) {
   const recipientName = formData.get('recipientName') as string;
   const programTitle = formData.get('programTitle') as string;
-  const customCode = formData.get('certificateCode') as string || `PSA/2026/CERT/${Math.floor(1000 + Math.random() * 9000)}`;
+  const customCode = (formData.get('certificateCode') as string) || `PSA/2026/CERT/${Math.floor(1000 + Math.random() * 9000)}`;
 
   if (!recipientName || !programTitle) {
     return { success: false, message: 'Nama peserta dan program wajib diisi.' };
   }
 
-  // 1. Pastikan ada dummy profile / profile peserta
-  const dummyProfileId = crypto.randomUUID();
-  await supabase.from('profiles').upsert({
-    id: dummyProfileId,
-    full_name: recipientName,
-    role: 'student'
-  });
-
-  // 2. Pastikan ada program
+  // 1. Dapatkan atau buat program jika belum ada
   let { data: program } = await supabase
     .from('programs')
     .select('id')
@@ -79,12 +71,13 @@ export async function createNewCertificate(formData: FormData) {
     program = newProg;
   }
 
-  // 3. Masukkan ke tabel certificates
+  // 2. Simpan sertifikat langsung (tanpa perlu user_id akun login)
   const { data: cert, error } = await supabase
     .from('certificates')
     .insert({
       certificate_code: customCode,
-      user_id: dummyProfileId,
+      recipient_name: recipientName,
+      program_name: programTitle,
       program_id: program?.id,
       issue_date: new Date().toISOString().split('T')[0]
     })

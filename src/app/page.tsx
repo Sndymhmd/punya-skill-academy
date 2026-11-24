@@ -6,6 +6,7 @@ import DemoDaySection from '@/components/DemoDaySection';
 import InternshipForm from '@/components/InternshipForm';
 import VerifyCertificate from '@/components/VerifyCertificate';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp';
+import ChatWidget from '@/components/ChatWidget';
 import Footer from '@/components/Footer';
 
 export const metadata = {
@@ -24,6 +25,7 @@ export default function Home() {
       <VerifyCertificate />
       <Footer />
       <FloatingWhatsApp />
+      <ChatWidget />
     </main>
   );
 }
